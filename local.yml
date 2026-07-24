@@ -1,0 +1,19 @@
+---
+- name: Deploy Forgejo, Coder, and CUDA Environment
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Install Forgejo via EasyForgejo script
+      shell: curl -sSL https://wkoszek.github.io/easyforgejo/install.sh | bash | tail -23 > FORGEJO.md
+      args:
+        creates: /usr/local/bin/forgejo
+
+    - name: Get status of the file
+      ansible.builtin.stat:
+        path: FORGEJO.md
+      register: file_info
+
+    - name: Debug if file exists
+      ansible.builtin.debug:
+        msg: "Read FORGEJO.md for further instructions."
+      when: file_info.stat.exists
