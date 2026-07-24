@@ -1,5 +1,5 @@
 ---
-- name: Deploy Forgejo, Coder, and CUDA Environment
+- name: Deploy Forgejo
   hosts: localhost
   become: true
   tasks:
@@ -15,5 +15,5 @@
 
     - name: Debug if file exists
       ansible.builtin.debug:
-        msg: "Read FORGEJO.md for further instructions."
+        msg: "Read {{ my_file_path | dirname }}/FORGEJO.md for further instructions."
       when: file_info.stat.exists
