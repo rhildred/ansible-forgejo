@@ -15,5 +15,5 @@
 
     - name: Debug if file exists
       ansible.builtin.debug:
-        msg: "Read {{ my_file_path | dirname }}/FORGEJO.md for further instructions."
+        msg: "Read {{ file_info.stat.path | dirname }}/FORGEJO.md for further instructions."
       when: file_info.stat.exists
