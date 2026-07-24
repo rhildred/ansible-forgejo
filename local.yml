@@ -20,6 +20,21 @@
         - { option: 'ENABLE_OPENID_SIGNUP', value: 'false' }
       notify: Restart Forgejo Service        
 
+    - name: Configure Forgejo server block for localhost only
+      community.general.ini_file:
+        path: /etc/forgejo/app.ini  # Update this to your actual app.ini path
+        section: server
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+        mode: '0660'
+        owner: forgejo              # Update to your Forgejo system user if different
+        group: forgejo              # Update to your Forgejo system group if different
+      loop:
+        - { key: 'HTTP_ADDR', value: '127.0.0.1' }
+        - { key: 'DOMAIN', value: 'localhost' }
+        - { key: 'LOCAL_ROOT_URL', value: 'http://localhost:3000/' }
+      notify: Restart Forgejo Service        
+
     - name: Get status of the file
       ansible.builtin.stat:
         path: FORGEJO.md
