@@ -26,9 +26,6 @@
         section: server
         option: "{{ item.key }}"
         value: "{{ item.value }}"
-        mode: '0660'
-        owner: forgejo              # Update to your Forgejo system user if different
-        group: forgejo              # Update to your Forgejo system group if different
       loop:
         - { key: 'HTTP_ADDR', value: '127.0.0.1' }
         - { key: 'DOMAIN', value: 'localhost' }
