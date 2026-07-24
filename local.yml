@@ -8,6 +8,18 @@
       args:
         creates: /usr/local/bin/forgejo
 
+    - name: Apply security baseline to Forgejo config
+      community.general.ini_file:
+        path: /etc/forgejo/app.ini
+        section: service
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+      loop:
+        - { option: 'DISABLE_REGISTRATION', value: 'true' }
+        - { option: 'REQUIRE_SIGNIN_VIEW', value: 'true' }
+        - { option: 'ENABLE_OPENID_SIGNUP', value: 'false' }
+      notify: Restart Forgejo Service        
+
     - name: Get status of the file
       ansible.builtin.stat:
         path: FORGEJO.md
@@ -17,3 +29,8 @@
       ansible.builtin.debug:
         msg: "Read {{ playbook_dir }}/FORGEJO.md for further instructions."
       when: file_info.stat.exists
+  handlers:
+    - name: Restart Forgejo Service
+      ansible.builtin.systemd:
+        name: forgejo
+        state: restarted
